@@ -18,3 +18,4 @@ reference and transfers:
 
 billing status:
 <img width="1920" height="1080" alt="Screenshot 2026-08-28 032145" src="https://github.com/user-attachments/assets/21a2b7ee-1a86-49a7-ac44-2569c30d4516" />
+*--This app is currently a prototype developed by Mr.Mayank narula from M.R.U for smart india hackathon .Not suggest for professional use before testing and is currently in development stage-- *
