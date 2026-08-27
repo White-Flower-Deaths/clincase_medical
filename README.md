@@ -2,7 +2,7 @@
 
 ClinCase is a Next.js application for doctors and medical teams to manage patient information, clinical cases, referrals, transfers, casualty records, and billing.
 
-> **Prototype notice:** This project was developed for a Smart India Hackathon prototype. It is not intended for professional or clinical use without appropriate testing, security review, privacy controls, and regulatory compliance.
+> **Prototype notice:** This project was developed for a Smart India Hackathon prototype. It is not intended for professional or clinical use without appropriate testing, security review, privacy controls, and regulatory compliance.IT is made by MR.MAYANK NARULA and his team members from M.R.U.
 
 ## Tech stack
 
@@ -85,7 +85,8 @@ Do not run `npm run db:seed` against a database containing real users or patient
 
 ### Doctor profile
 
-<img width="1920" height="1080" alt="Doctor profile" src="https://github.com/user-attachments/assets/0bf701d9-6bb7-44a7-ac56-d71e44a7d1d5" />
+<img width="1920" height="1080" alt="Screenshot 2026-08-28 032055" src="https://github.com/user-attachments/assets/299c2dd1-d363-4f40-8051-65f43b3026e3" />
+
 
 ### Referrals and transfers
 
@@ -100,5 +101,3 @@ Do not run `npm run db:seed` against a database containing real users or patient
 <img width="1920" height="1080" alt="Billing status" src="https://github.com/user-attachments/assets/21a2b7ee-1a86-49a7-ac44-2569c30d4516" />
 
 ## License
-
-MIT — for demonstration purposes.
