@@ -1,68 +1,62 @@
-# ClinCase — Patient Case Taking Software
+# ClinCase
 
-Hackathon-ready clinical case-taking web app for doctors: register patients, complete guided multi-step case intake, and review printable case summaries.
+ClinCase is a Next.js application for doctors and medical teams to manage patient information, clinical cases, referrals, transfers, casualty records, and billing.
+
+> **Prototype notice:** This project was developed for a Smart India Hackathon prototype. It is not intended for professional or clinical use without appropriate testing, security review, privacy controls, and regulatory compliance.
 
 ## Tech stack
 
-- **Frontend:** Next.js 14 (App Router), TypeScript, custom clinical UI
+- **Frontend:** Next.js 14 (App Router), React, TypeScript
 - **Backend:** Next.js API routes
-- **Auth:** NextAuth.js (credentials)
+- **Authentication:** NextAuth.js credentials provider
 - **Database:** PostgreSQL via Prisma ORM
 
 ## Quick start
 
 ```bash
-cd clincase
 npm install
 npm run db:push
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000).
 
 ### Demo login
 
-| Field    | Value                 |
-|----------|-----------------------|
-| Email    | `doctor@clincase.dev` |
-| Password | `demo1234`            |
+| Field | Value |
+| --- | --- |
+| Email | `doctor@clincase.dev` |
+| Password | `demo1234` |
 
 ## Features
 
-- Brand landing page (**ClinCase**)
-- Doctor sign-in with protected routes
-- Dashboard with patient/case stats and recent activity
-- Patient registry with search
-- New patient registration
-- 7-step case-taking wizard with draft autosave
-  1. Chief complaint
-  2. History of present illness
-  3. Past & social history
-  4. Medications & allergies
-  5. Review of systems
-  6. Vitals & examination
-  7. Assessment & plan
-- Case review view with print support
-- Seeded demo doctor, 3 patients, 1 completed sample case
+- Doctor sign-in and protected routes
+- Patient registry and search
+- Guided seven-step case-taking wizard with draft autosave
+- Patient history, vitals, examination, assessment, and plan
+- Referral network and patient transfers
+- Casualty severity tracking
+- Billing records
+- Printable case review
 
 ## Scripts
 
 | Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run start` | Run production server |
-| `npm run db:push` | Sync Prisma schema to PostgreSQL |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Run the production server |
+| `npm run db:push` | Sync the Prisma schema to PostgreSQL |
 | `npm run db:seed` | Load demo data |
-| `npm run db:setup` | Push schema + seed |
+| `npm run db:setup` | Push the schema and load demo data |
 
 ## Environment
 
-Copy `.env.example` to `.env` (already set for local demo):
+Copy `.env.example` to `.env` and set:
 
-```
+```env
 DATABASE_URL="postgresql://USER:PASSWORD@HOST/DB?sslmode=require"
-NEXTAUTH_SECRET="your-secret"
+NEXTAUTH_SECRET="your-long-random-secret"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
@@ -70,47 +64,41 @@ NEXTAUTH_URL="http://localhost:3000"
 
 ClinCase can be deployed using Vercel and Neon:
 
-1. Create a free PostgreSQL database at [Neon](https://neon.tech) and copy its pooled connection string.
+1. Create a free PostgreSQL database at [Neon](https://neon.tech).
 2. Push this project to a private GitHub repository.
 3. Import the repository into [Vercel](https://vercel.com).
-4. Add `DATABASE_URL`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL` as Vercel environment variables. Set `NEXTAUTH_URL` to the deployed HTTPS URL.
-5. Deploy, then run `npm run db:push` once with the Neon `DATABASE_URL` to create the tables.
+4. Add `DATABASE_URL`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL` as Vercel environment variables.
+5. Set `NEXTAUTH_URL` to the deployed HTTPS URL.
+6. Run `npm run db:push` once using the Neon database URL to create the tables.
 
 Do not run `npm run db:seed` against a database containing real users or patient data; the seed script deletes existing users, patients, and cases. Replace the demo password before sharing the application.
 
-## Project structure
+## Screenshots
 
-```
-clincase/
-├── prisma/           # Schema + seed
-├── src/
-│   ├── app/          # Pages + API routes
-│   ├── components/   # UI + case wizard
-│   ├── lib/          # Prisma, auth, helpers
-│   └── types/
-├── .env.example
-└── README.md
-```
+### Homepage
 
-## Hackathon submission checklist
+<img width="1920" height="1080" alt="ClinCase homepage" src="https://github.com/user-attachments/assets/c0a2414a-971e-45b0-9d6a-58169db7bbb7" />
 
-- [x] Full-stack app (UI + API + database)
-- [x] Working auth and demo credentials
-- [x] Seeded sample data for live demo
-- [x] README with setup instructions
-- [x] `.env.example` and `.gitignore`
-- [x] One-command DB setup
-- [ ] Zip the `clincase` folder **excluding** `node_modules` and `.next` (or include them if judges want offline install)
-- [ ] Add 2–3 screenshots to this README under `docs/` if required by the portal
+### Dashboard
 
-## Demo flow for judges
+<img width="1920" height="1080" alt="ClinCase dashboard" src="https://github.com/user-attachments/assets/3cbfd4cd-3f3c-40c6-979b-d475bb46fcd7" />
 
-1. Open landing → **Start case taking**
-2. Sign in with demo credentials
-3. Dashboard → open a patient → **Start case**
-4. Walk the wizard, save draft, complete case
-5. Open case review → Print
+### Doctor profile
+
+<img width="1920" height="1080" alt="Doctor profile" src="https://github.com/user-attachments/assets/0bf701d9-6bb7-44a7-ac56-d71e44a7d1d5" />
+
+### Referrals and transfers
+
+<img width="1920" height="1080" alt="Referrals and transfers" src="https://github.com/user-attachments/assets/8e832321-f944-4022-a22f-1715e191b2e4" />
+
+### Patient conditions
+
+<img width="1920" height="1080" alt="Patient conditions" src="https://github.com/user-attachments/assets/255db198-288b-494b-9163-f508a2c396ad" />
+
+### Billing status
+
+<img width="1920" height="1080" alt="Billing status" src="https://github.com/user-attachments/assets/21a2b7ee-1a86-49a7-ac44-2569c30d4516" />
 
 ## License
 
-MIT — built for hackathon demonstration. Not for clinical production use or HIPAA-regulated PHI.
+MIT — for demonstration purposes.
