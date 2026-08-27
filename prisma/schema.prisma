@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  specialty    String?
+  role         String   @default("doctor")
+  createdAt    DateTime @default(now())
+  cases        Case[]
+  networks     ReferralNetwork[]
+  transfers    PatientTransfer[]
+  casualties   Casualty[]
+  bills        Bill[]
+}
+
+model Patient {
+  id         String   @id @default(cuid())
+  mrn        String   @unique
+  firstName  String
+  lastName   String
+  age        Int
+  sex        String
+  phone      String?
+  email      String?
+  address    String?
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  cases      Case[]
+  transfers  PatientTransfer[]
+  casualties Casualty[]
+  bills      Bill[]
+}
+
+model Case {
+  id              String   @id @default(cuid())
+  patientId       String
+  doctorId        String
+  status          String   @default("draft")
+  chiefComplaint  String?
+  hpi             String?
+  pastHistory     String?
+  surgicalHistory String?
+  familyHistory   String?
+  socialHistory   String?
+  medications     String?
+  allergies       String?
+  reviewOfSystems String?
+  vitals          String?
+  examination     String?
+  assessment      String?
+  plan            String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  patient         Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor          User     @relation(fields: [doctorId], references: [id])
+}
+
+/// Type 1 referred: doctors, medicines, checkups, hospitals
+model ReferralNetwork {
+  id        String   @id @default(cuid())
+  doctorId  String
+  kind      String
+  name      String
+  details   String?
+  contact   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  doctor    User     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@index([doctorId, kind])
+}
+
+/// Type 2 referred: past patient transfers (ward / doctor / destination)
+model PatientTransfer {
+  id          String   @id @default(cuid())
+  doctorId    String
+  patientId   String
+  shiftedTo   String
+  ward        String?
+  underDoctor String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  doctor      User     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([doctorId])
+  @@index([patientId])
+}
+
+model Casualty {
+  id        String   @id @default(cuid())
+  doctorId  String
+  patientId String
+  severity  String
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  doctor    User     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([doctorId, patientId])
+  @@index([severity])
+}
+
+model Bill {
+  id           String   @id @default(cuid())
+  doctorId     String
+  patientId    String?
+  description  String
+  amountRupees Float
+  paid         Boolean  @default(false)
+  billedAt     DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  doctor       User     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  patient      Patient? @relation(fields: [patientId], references: [id], onDelete: SetNull)
+
+  @@index([doctorId])
+  @@index([paid])
+}
