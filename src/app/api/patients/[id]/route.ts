@@ -26,14 +26,13 @@ const updateSchema = z.object({
 
 export async function GET(_req: NextRequest, { params }: Params) {
   return handleApi(async () => {
-    const { session, error } = await requireSession();
-    if (error || !session) return error!;
+    const { error } = await requireSession();
+    if (error) return error;
 
     const patient = await prisma.patient.findUnique({
       where: { id: params.id },
       include: {
         cases: {
-          where: { doctorId: session.user.id },
           orderBy: { updatedAt: "desc" },
           include: { doctor: { select: { id: true, name: true } } },
         },

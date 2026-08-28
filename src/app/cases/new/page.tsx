@@ -26,9 +26,7 @@ export default async function NewCasePage({
   const caseId = searchParams.caseId;
 
   if (caseId) {
-    const existing = await prisma.case.findFirst({
-      where: { id: caseId, doctorId: session.user.id },
-    });
+    const existing = await prisma.case.findUnique({ where: { id: caseId } });
     if (!existing || existing.patientId !== patientId) notFound();
     initial = {
       chiefComplaint: existing.chiefComplaint ?? "",

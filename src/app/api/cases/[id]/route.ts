@@ -27,10 +27,10 @@ const updateSchema = z.object({
 
 export async function GET(_req: NextRequest, { params }: Params) {
   return handleApi(async () => {
-    const { session, error } = await requireSession();
-    if (error || !session) return error!;
-    const clinicalCase = await prisma.case.findFirst({
-      where: { id: params.id, doctorId: session.user.id },
+    const { error } = await requireSession();
+    if (error) return error;
+    const clinicalCase = await prisma.case.findUnique({
+      where: { id: params.id },
       include: { patient: true, doctor: { select: { id: true, name: true, email: true } } },
     });
     if (!clinicalCase) return apiError("Case not found", 404);
@@ -40,8 +40,8 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
 export async function PATCH(req: NextRequest, { params }: Params) {
   return handleApi(async () => {
-    const { session, error } = await requireSession();
-    if (error || !session) return error!;
+    const { error } = await requireSession();
+    if (error) return error;
     let body: unknown;
     try {
       body = await req.json();
@@ -50,10 +50,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     }
     const parsed = updateSchema.safeParse(body);
     if (!parsed.success) return apiError("Invalid case details");
-    const existing = await prisma.case.findFirst({
-      where: { id: params.id, doctorId: session.user.id },
-      select: { id: true },
-    });
+    const existing = await prisma.case.findUnique({ where: { id: params.id }, select: { id: true } });
     if (!existing) return apiError("Case not found", 404);
     const updated = await prisma.case.update({
       where: { id: existing.id },
@@ -66,12 +63,9 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
 export async function DELETE(_req: NextRequest, { params }: Params) {
   return handleApi(async () => {
-    const { session, error } = await requireSession();
-    if (error || !session) return error!;
-    const existing = await prisma.case.findFirst({
-      where: { id: params.id, doctorId: session.user.id },
-      select: { id: true },
-    });
+    const { error } = await requireSession();
+    if (error) return error;
+    const existing = await prisma.case.findUnique({ where: { id: params.id }, select: { id: true } });
     if (!existing) return apiError("Case not found", 404);
     await prisma.case.delete({ where: { id: existing.id } });
     return apiOk({ ok: true });
