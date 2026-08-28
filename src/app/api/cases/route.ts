@@ -26,13 +26,14 @@ const caseSchema = z.object({
 
 export async function GET(req: NextRequest) {
   return handleApi(async () => {
-    const { error } = await requireSession();
-    if (error) return error;
+    const { session, error } = await requireSession();
+    if (error || !session) return error!;
 
     const patientId = req.nextUrl.searchParams.get("patientId");
     const status = req.nextUrl.searchParams.get("status");
     const cases = await prisma.case.findMany({
       where: {
+        doctorId: session.user.id,
         ...(patientId ? { patientId } : {}),
         ...(status ? { status } : {}),
       },

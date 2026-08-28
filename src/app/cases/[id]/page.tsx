@@ -27,8 +27,8 @@ export default async function CaseReviewPage({
   const session = await getServerSession(authOptions);
   if (!session?.user) redirect("/login");
 
-  const clinicalCase = await prisma.case.findUnique({
-    where: { id: params.id },
+  const clinicalCase = await prisma.case.findFirst({
+    where: { id: params.id, doctorId: session.user.id },
     include: {
       patient: true,
       doctor: { select: { name: true, email: true } },

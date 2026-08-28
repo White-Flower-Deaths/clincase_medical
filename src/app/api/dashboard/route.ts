@@ -8,18 +8,24 @@ export async function GET() {
   return handleApi(async () => {
     const { session, error } = await requireSession();
     if (error || !session) return error!;
+    const doctorId = session.user.id;
     const [patientCount, caseCount, draftCount, completedCount, recentCases, recentPatients] =
       await Promise.all([
-        prisma.patient.count(),
-        prisma.case.count(),
-        prisma.case.count({ where: { status: "draft" } }),
-        prisma.case.count({ where: { status: "completed" } }),
+        prisma.patient.count({ where: { cases: { some: { doctorId } } } }),
+        prisma.case.count({ where: { doctorId } }),
+        prisma.case.count({ where: { doctorId, status: "draft" } }),
+        prisma.case.count({ where: { doctorId, status: "completed" } }),
         prisma.case.findMany({
+          where: { doctorId },
           take: 6,
           orderBy: { updatedAt: "desc" },
           include: { patient: true, doctor: { select: { name: true } } },
         }),
-        prisma.patient.findMany({ take: 5, orderBy: { updatedAt: "desc" } }),
+        prisma.patient.findMany({
+          where: { cases: { some: { doctorId } } },
+          take: 5,
+          orderBy: { updatedAt: "desc" },
+        }),
       ]);
     return apiOk({
       doctorName: session.user.name,
