@@ -22,6 +22,7 @@ export default async function PatientDetailPage({
     where: { id: params.id },
     include: {
       cases: {
+        where: { doctorId: session.user.id },
         orderBy: { updatedAt: "desc" },
         include: { doctor: { select: { name: true } } },
       },
